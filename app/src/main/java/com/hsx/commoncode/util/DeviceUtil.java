@@ -2,9 +2,12 @@ package com.hsx.commoncode.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.view.Display;
+import android.view.WindowManager;
 
 /**
  * Created by Doraemon
@@ -50,4 +53,45 @@ public class DeviceUtil {
         }
         return deviceId;
     }
+
+    /**
+     * 获取屏幕的宽高
+     *
+     * @param context
+     * @return
+     */
+    @TargetApi(13)
+    public static Point getDevicePoint(Context context) {
+
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        Point point = new Point();
+        if (Build.VERSION.SDK_INT >= 13) {
+            display.getSize(point);
+        } else {
+            point.set(display.getWidth(), display.getHeight());
+        }
+        return point;
+    }
+
+    /**
+     * 获取当前设备高，单位px
+     *
+     * @param context
+     * @return
+     */
+    public static int getDeviceHeight(Context context) {
+        return getDevicePoint(context).y;
+    }
+
+    /**
+     * 获取当前设备宽，单位px
+     *
+     * @param context
+     * @return
+     */
+    public static int getDeviceWidth(Context context) {
+        return getDevicePoint(context).x;
+    }
+
 }

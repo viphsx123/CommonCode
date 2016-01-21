@@ -1,39 +1,23 @@
 package com.hsx.commoncode.util;
 
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Point;
-import android.os.Build;
-import android.view.Display;
-import android.view.WindowManager;
+import android.util.TypedValue;
 
 /**
  * Created by Doraemon
  * Date: 2014/8/6
  * Time: 15:20
- * 设备屏幕尺寸相关
+ * 常用单位转换
  */
 public class DensityUtil {
 
-    /**
-     * dip转px的方法
-     *
-     * @param context
-     * @param value
-     * @return int
-     * @author Doraemon
-     * @time 2014年8月6日上午11:05:23
-     */
-    public static int dipToPx(Context context, float value) {
-        Float displayDensity = Float.valueOf(context.getResources().getDisplayMetrics().density);
-        float rawPx = value * displayDensity.floatValue();
-        return (int) (0.5F + rawPx);
+    private DensityUtil() {
     }
 
     /**
-     * dip转px的另一种方法
+     * dp转px的另一种方法(不需要context)
      *
      * @param value
      * @return
@@ -42,44 +26,51 @@ public class DensityUtil {
         return (int) (value * Resources.getSystem().getDisplayMetrics().density);
     }
 
-
     /**
-     * 获取屏幕的宽高
+     * dp转px
      *
      * @param context
+     * @param dpVal
      * @return
      */
-    @TargetApi(13)
-    public static Point getDevicePoint(Context context) {
-
-        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = manager.getDefaultDisplay();
-        Point point = new Point();
-        if (Build.VERSION.SDK_INT >= 13) {
-            display.getSize(point);
-        } else {
-            point.set(display.getWidth(), display.getHeight());
-        }
-        return point;
+    public static int dp2px(Context context, float dpVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
     }
 
     /**
-     * 获取当前设备高，单位px
+     * px转dp
      *
      * @param context
+     * @param pxVal
      * @return
      */
-    public static int getDeviceHeight(Context context) {
-        return getDevicePoint(context).y;
+    public static float px2dp(Context context, float pxVal) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (pxVal / scale);
     }
 
     /**
-     * 获取当前设备宽，单位px
+     * sp转px
      *
      * @param context
+     * @param spVal
      * @return
      */
-    public static int getDeviceWidth(Context context) {
-        return getDevicePoint(context).x;
+    public static int sp2px(Context context, float spVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                spVal, context.getResources().getDisplayMetrics());
     }
+
+    /**
+     * px转sp
+     *
+     * @param context
+     * @param pxVal
+     * @return
+     */
+    public static float px2sp(Context context, float pxVal) {
+        return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
+    }
+
 }
